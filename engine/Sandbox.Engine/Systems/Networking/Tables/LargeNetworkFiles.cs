@@ -49,13 +49,12 @@ internal class LargeNetworkFiles
 	/// <summary>
 	/// Add a file to be networked.
 	/// </summary>
-	public bool AddFile( string fileName )
+	public bool AddFile( BaseFileSystem fs, string fileName, long size )
 	{
-		if ( !EngineFileSystem.Mounted.FileExists( fileName ) )
+		if ( !fs.FileExists( fileName ) )
 			return false;
 
-		var crc = EngineFileSystem.Mounted.GetCrc( fileName );
-		var size = EngineFileSystem.Mounted.FileSize( fileName );
+		var crc = fs.GetCrc( fileName );
 		var normalizedFileName = NormalizeFileName( fileName );
 		StringTable.Set( normalizedFileName, new LargeFileInfo( size, crc ) );
 

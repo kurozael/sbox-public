@@ -291,7 +291,6 @@ internal partial class GameInstanceDll
 
 		bool isEngineAsset = _engineAssets.Any( x => filename.EndsWith( x ) );
 
-		var fullPath = fs.GetFullPath( filename );
 		var size = fs.FileSize( filename );
 
 		var smallFileSize = 1024 * 64; // biggest file to include in the memory filesystem is 64kb
@@ -308,12 +307,13 @@ internal partial class GameInstanceDll
 			}
 			else
 			{
+				var fullPath = fs.GetFullPath( filename );
 				Log.Warning( $"File '{filename}' ('{fullPath}') doesn't exist - skipping" );
 			}
 		}
 		else
 		{
-			var wasAdded = NetworkedLargeFiles.AddFile( filename );
+			var wasAdded = NetworkedLargeFiles.AddFile( fs, filename, size );
 
 			if ( wasAdded )
 			{
@@ -322,6 +322,7 @@ internal partial class GameInstanceDll
 			}
 			else
 			{
+				var fullPath = fs.GetFullPath( filename );
 				Log.Warning( $"File '{filename}' ('{fullPath}') doesn't exist - skipping" );
 			}
 		}
